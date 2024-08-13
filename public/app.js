@@ -83,12 +83,22 @@ function DATA_UL(data){
     })
     return ul
 }
+function DATA_EXIST_BD(data){
+    const ul = document.createElement('ul')
+    data.forEach(item => {
+        let li = document.createElement('li')
+        li.textContent = item.sql
+        ul.appendChild(li)
+    })
+    return ul
+}
 
 const form = document.getElementById('form_submit')
 const input = document.getElementById('txt_query')
 const idItem = document.getElementById('id-item')
 const typeQuery = document.getElementById('sql-tables')
 const dataUL = document.getElementById('data-ul')
+const dataBD = document.getElementById('bd-data')
 const numWordsExist = document.getElementById('existe-num')
 const numWordsNoExist = document.getElementById('noexiste-num')
 
@@ -107,14 +117,39 @@ async function QueryIDWords(query, id){
     const req = await getMetaData(query, id)
     const res = await FetchIDData(req)
     const newUL = DATA_UL(res.vacios)
+    const queryBD = DATA_UL(res.data)
     console.log('-Respuesta del dervidor-');
     console.log(res);
     numWordsExist.textContent = String(res.data.length)
     numWordsNoExist.textContent = String(res.vacios.length)
     dataUL.innerHTML = ''
+    dataBD.innerHTML = ''
     dataUL.appendChild(newUL)
+    dataBD.appendChild(queryBD)
 }
-
+async function getIDBook(book){
+    try {
+        const response = await fetch('http://localhost:5001/bookID', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(book)
+        })
+        if(!response.ok) throw new Error("ERROR SERVER")
+        return response.json()
+    } catch (error) {
+        console.log(error);
+    }
+}
+input.addEventListener('blur', async ()=>{
+    if(!input.value) return
+    let value = input.value.toLowerCase().trim()
+    let res = await getIDBook({word: value})
+    console.log('Respuesta del servidor');
+    console.log(res);
+    idItem.value = res.isdata ? String(res.id) : String(res.failed)
+})
 form.addEventListener('submit', async(e)=>{
     e.preventDefault()
     const value = input.value

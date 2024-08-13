@@ -59,6 +59,19 @@ router.post('/db', async (req, res) => {
     const data = await SearchWord(query)
     res.json(data)
 });
+router.post('/bookID', async(req, res)=>{
+    const {word} = req.body
+    console.log(req.body);
+    const sql = 'SELECT notice_id FROM notices WHERE LOWER(tit1) LIKE ?'
+    const [result] = await db.query(sql, word)
+    console.log(result);
+    if(result.length > 0){
+        let dato = result[0].notice_id
+        res.json({id: dato, isdata: true})
+    }else{
+        res.json({failed: '00000', isdata: false})
+    }
+})
 router.post('/words', async (req, res)=>{
     if (!Array.isArray(req.body)) {
         return res.status(400).json({ error: 'Se esperaba un array de palabras.' });
