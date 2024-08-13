@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BUG 404</title>
+</head>
+<style>
+    *{
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: system-ui;
+    }
+    html{
+        color-scheme: dark;
+        font-size: 16px;
+    }
+    h1{
+        text-align: center;
+        margin: 1rem auto 0;
+    }
+    select, input{
+        padding: .5rem;
+    }
+    textarea{
+        field-sizing: content;
+        padding: .5rem;
+        height: auto;
+        max-height: 400px;
+    }
+    button{
+        padding: .5rem 2rem;
+    }
+    form{
+        width: 450px;
+        display: grid;
+        gap: .4rem;
+        border: 1px solid grey;
+        margin: 2rem auto 0;
+        padding: 2rem;
+        border-radius: 30px;
+    }
+    .response .label{
+        max-width: 800px;
+        margin: 1rem auto 0;
+        text-align: center;
+        font-size: 2rem;
+    }
+    .response .label .red{color: red;}
+    .response .label .green{color: green;}
+
+    .response .data ul{
+        border: 1px solid grey;
+        display: grid;
+        gap: .2rem;
+        margin: 1rem auto 0;
+        padding: .5rem;
+        width: max-content;
+        max-width: 800px;
+    }
+    .response .data ul li{
+        list-style: none;
+        color: white;
+    }
+</style>
+<body>
+    <h1>Generar Query</h1>
+    <div class="container">
+        <form id="form_submit">
+            <label for="">Ingrese texto</label>
+            <textarea id="txt_query"></textarea>
+            <label for="">ID del Elemento</label>
+            <input type="number" required id="id-item">
+            <label for="">Tabla a consultar</label>
+            <select name="" id="sql-tables">
+                <option value="0">seleccione..</option>
+                <option value="1">WORDS: crear insert</option>
+                <option value="2">WORDS: consultar IDs</option>
+            </select>
+            <button type="submit">ENVIAR</button>
+            <button type="reset">LIMPIAR</button>
+        </form>
+        <div class="response">
+            <div class="label">
+                <p class="green">Palabras Registradas en BD: <span id="existe-num"></span></p>
+                <p class="red">Palabras no registradas en la BD: <span id="noexiste-num"></span></p>
+            </div>
+            <div class="data" id="data-ul">
+                <!-- ul con varios li -->
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
