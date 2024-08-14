@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const db = require('./db.js');
+const { queryMotsGlobalIndex} = require('./functions.js');
+const { sql_ID_NOTICE } = require('./sql/get.notices-id.js');
+const { sql_ID_WORD } = require('./sql/get.word-id.js');
 
-async function createQueryWords(value, code){
-    let sql = `INSERT INTO words (word, lang, double_metaphone, stem) VALUES ('${value}', 'es_ES', '${code}', '${value}');`
-    return sql;
-}
+
 
 async function SearchWord(words) {
     const existen = [];
@@ -19,7 +19,7 @@ async function SearchWord(words) {
                 existen.push({ word:word.word, exists: true });
             } else {
                 let insert = await createQueryWords(word.word, word.full)
-                no_existen.push({ word: insert, exists: false });
+                no_existen.push({ word: word.word,sql: insert, exists: false });
             }
         } catch (error) {
             console.error('Error en la consulta para la palabra:', word, error);
@@ -33,18 +33,14 @@ async function GetIDWords(arr){
     let empty = []
     for(const mot of arr){
         try {
-            let sql = `SELECT id_word, word FROM words WHERE word LIKE ? AND lang LIKE 'es_ES'`
-            const [result] = await db.execute(sql, [`${mot.word}`]);
-            if(result.length > 0) response.push(...result)
-            else{
-                let insert = await createQueryWords(mot.word, mot.full)
-                empty.push({word: mot.word, sql: insert})
-            }
+            const result = await sql_ID_WORD(mot)
+            result.exist ? response.push(result) : empty.push(result)
         } catch (error) {
             console.log(error);
         }
     }
-    return {data: response, vacios: empty};
+    const valueMots = queryMotsGlobalIndex(response);
+    return {data: response, vacios: empty, sql: valueMots};
 }
 
 router.get('/db', (_, res) => {
@@ -60,17 +56,9 @@ router.post('/db', async (req, res) => {
     res.json(data)
 });
 router.post('/bookID', async(req, res)=>{
-    const {word} = req.body
     console.log(req.body);
-    const sql = 'SELECT notice_id FROM notices WHERE LOWER(tit1) LIKE ?'
-    const [result] = await db.query(sql, word)
-    console.log(result);
-    if(result.length > 0){
-        let dato = result[0].notice_id
-        res.json({id: dato, isdata: true})
-    }else{
-        res.json({failed: '00000', isdata: false})
-    }
+    const result = await sql_ID_NOTICE(req.body)
+    res.json(result)
 })
 router.post('/words', async (req, res)=>{
     if (!Array.isArray(req.body)) {
