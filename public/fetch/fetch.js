@@ -71,3 +71,19 @@ export async function FetchIDBook(book){
         console.log(error);
     }
 }
+// FETCH A LA RUTA /GENERATE-INSERT
+export async function FetchTablesBook(book){
+    try {
+        const response = await fetch('http://localhost:5001/generate-insert', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(book)
+        })
+        if(!response.ok) throw new Error("ERROR SERVER")
+        return response.json()
+    } catch (error) {
+        console.log(error);
+    }
+}
