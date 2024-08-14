@@ -2,8 +2,7 @@ export function LongText(value) {
     const arr = value
         .trim() // Quita los espacios de sobra al inicio y final
         .replace(/[\n;,.!?\-(){}[\]'"`]/g, '') // Quita los saltos de línea y símbolos específicos
-        .replace(/\s{1,}/g, '')
-        
+        .replace(/\s{1,}/g, '')  
     return arr.length;
 }
 export function SplitText(value) {

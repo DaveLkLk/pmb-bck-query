@@ -9,6 +9,9 @@ export async function CONTROLLER_SELECT(value, params){
     if(value === '2'){
         await QueryIDWords(params)
     }
+    if(value === '3'){
+        
+    }
     else{
         console.log('OPCION NO VALIDA');
     }

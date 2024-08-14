@@ -1,9 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const db = require('./db.js');
+const validateArray = require('./middleware/array.js')
 const { queryMotsGlobalIndex} = require('./functions.js');
 const { sql_ID_NOTICE } = require('./sql/get.notices-id.js');
 const { sql_ID_WORD } = require('./sql/get.word-id.js');
+const { sql_CONCAT_INDEX_INFOS, sql_CONCAT_INDEX_INFOS_GLOBAL } = require('./sql/constructor/notices-constructor.js');
+const { sql_INSERT_WORDS, CONTROLLER_INSERT_TABLES } = require('./sql/post.notices-tables.js');
 
 
 
@@ -31,6 +34,9 @@ async function SearchWord(words) {
 async function GetIDWords(arr){
     let response = []
     let empty = []
+    // await sql_CONCAT_INDEX_INFOS({num_notice: 1})
+    // await sql_CONCAT_INDEX_INFOS_GLOBAL({num_notice: 1})
+    await sql_INSERT_WORDS({id_notice: 2})
     for(const mot of arr){
         try {
             const result = await sql_ID_WORD(mot)
@@ -67,6 +73,10 @@ router.post('/words', async (req, res)=>{
     }
     const response = await GetIDWords(req.body)
     res.json(response)
+})
+router.post('/generate-insert', validateArray, async(req, res)=>{
+    const response = await CONTROLLER_INSERT_TABLES(req.body)
+    
 })
 
 
