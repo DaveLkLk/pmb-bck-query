@@ -34,13 +34,14 @@ async function GetIDWords(arr){
     for(const mot of arr){
         try {
             const result = await sql_ID_WORD(mot)
-            result.exist ? response.push(result) : empty.push(result)
+            !result.exist ? empty.push(result):'';
+            response.push(result)
         } catch (error) {
             console.log(error);
         }
     }
     const valueMots = queryMotsGlobalIndex(response);
-    return {data: response, vacios: empty, sql: valueMots};
+    return {data: response, newWords: empty, mots: valueMots};
 }
 
 router.get('/db', (_, res) => {

@@ -10,11 +10,11 @@ export async function QueryIDWords(params){
     const queryBD = DATA_UL(res.sql)
     console.log('-Respuesta del servidor-');
     console.log(res);
-    numWordsExist.textContent = String(res.data.length)
-    numWordsNoExist.textContent = String(res.vacios.length)
-    dataUL.innerHTML = ''
-    dataBD.innerHTML = ''
-    dataUL.appendChild(newUL)
-    dataBD.appendChild(queryBD)
+    // numWordsExist.textContent = String(res.data.length)
+    // numWordsNoExist.textContent = String(res.vacios.length)
+    // dataUL.innerHTML = ''
+    // dataBD.innerHTML = ''
+    // dataUL.appendChild(newUL)
+    // dataBD.appendChild(queryBD)
     return
 }

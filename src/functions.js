@@ -10,6 +10,17 @@ function queryMotsGlobalIndex(arr){
 
 }
 
+function queryFieldsGlobalIndex(arr){
+    let response = [];
+    console.log(arr);
+    for(let i =0; i< arr.length; i++){
+        let sql = `INSERT INTO notices_fields_global_index (id_notice,code_champ, code_ss_champ, ordre,value,lang,pond,authority_num) VALUES ('${arr[i].id_book}','1', '0', '${arr[i].id_word}', 130, '1', '${i+1}');`
+        response.push({sql})
+    }
+    return response;
+
+}
+
 module.exports = {
     queryMotsGlobalIndex
 }

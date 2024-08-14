@@ -35,8 +35,8 @@ form.addEventListener('submit', async(e)=>{
         numWordsNoExist, 
         dataUL,
         dataBD,
-        query,
-        id: itemID
+        query, //nombre del titulo
+        id: itemID //id_notice
     }
     value ? await CONTROLLER_SELECT(typeQuery.value, objHTML) : null
 })
