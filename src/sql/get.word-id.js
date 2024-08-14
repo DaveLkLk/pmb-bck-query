@@ -9,13 +9,14 @@ async function sql_ID_WORD(data){
         const { word, id_libro, full } = data
         let exist= true;
         let id_word= '';
+        let insert='';
         let sql = `SELECT id_word, word FROM words WHERE word LIKE ? AND lang LIKE 'es_ES';`
         const [result] = await db.execute(sql, [word]);
         if(result.length == 0) {
             sql = `SELECT max(id_word)+1 id_word FROM words;`;
             const [resultd] = await db.execute(sql);
             id_word= resultd[0].id_word;
-            let insert = await createQueryWords(id_word,word, full)
+            insert = await createQueryWords(id_word,word, full)
             exist= false;
         }
         else{
@@ -26,6 +27,7 @@ async function sql_ID_WORD(data){
             word: word,
             id_book: id_libro,
             exist: exist,
+            sql: insert
         }
         return res
     } catch (error) {
